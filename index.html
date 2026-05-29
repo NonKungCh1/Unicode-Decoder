@@ -18,6 +18,7 @@
     --code-bg: #0a0c10;
     --green: #4ade80;
     --yellow: #fbbf24;
+    --red: #ff7b72;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +34,6 @@
     padding: 32px 16px;
   }
 
-  /* background grid */
   body::before {
     content: '';
     position: fixed;
@@ -50,7 +50,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 860px;
+    max-width: 900px;
   }
 
   header {
@@ -62,7 +62,6 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(1.4rem, 4vw, 2rem);
     font-weight: 700;
-    letter-spacing: -0.5px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -70,10 +69,42 @@
 
   header p {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     margin-top: 6px;
   }
 
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ── CARD ── */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -86,28 +117,34 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 11px 16px;
     border-bottom: 1px solid var(--border);
     background: var(--surface2);
   }
 
   .card-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 1px;
   }
 
-  .char-count {
+  .info-pill {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--muted);
+    display: flex;
+    gap: 12px;
   }
+
+  /* ── TEXTAREA INPUT ── */
+  #pane-text { display: block; }
+  #pane-file { display: none; }
 
   textarea {
     width: 100%;
-    min-height: 160px;
+    min-height: 180px;
     padding: 16px;
     background: var(--code-bg);
     border: none;
@@ -115,13 +152,84 @@
     resize: vertical;
     color: var(--text);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     line-height: 1.7;
-    tab-size: 2;
   }
-
   textarea::placeholder { color: var(--muted); }
 
+  /* ── DROP ZONE ── */
+  .drop-zone {
+    margin: 20px;
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--code-bg);
+    position: relative;
+  }
+
+  .drop-zone:hover, .drop-zone.over {
+    border-color: var(--accent);
+    background: rgba(124,106,247,0.05);
+  }
+
+  .drop-zone input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .drop-icon {
+    font-size: 2.4rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .drop-zone h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .drop-zone p {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .file-info {
+    display: none;
+    margin: 0 20px 20px;
+    padding: 12px 16px;
+    background: rgba(79,209,197,0.08);
+    border: 1px solid rgba(79,209,197,0.2);
+    border-radius: 8px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  .file-info .fname { color: var(--accent2); flex: 1; }
+  .file-info .fsize { color: var(--muted); }
+
+  .file-remove {
+    background: transparent;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 4px;
+    font-family: inherit;
+  }
+
+  /* ── BUTTONS ── */
   .btn-row {
     display: flex;
     gap: 10px;
@@ -146,6 +254,7 @@
   }
   .btn-primary:hover { background: #6b5ce7; transform: translateY(-1px); }
   .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
   .btn-secondary {
     background: var(--surface2);
@@ -153,6 +262,15 @@
     border: 1px solid var(--border);
   }
   .btn-secondary:hover { background: var(--border); }
+
+  .btn-dl {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 5px 14px;
+    font-size: 0.72rem;
+  }
+  .btn-dl:hover { background: rgba(74,222,128,0.1); }
 
   .btn-copy {
     background: transparent;
@@ -164,7 +282,7 @@
   .btn-copy:hover { background: rgba(79,209,197,0.1); }
   .btn-copy.copied { color: var(--green); border-color: var(--green); }
 
-  /* Output area */
+  /* ── OUTPUT ── */
   #output-wrap { display: none; }
 
   .output-type-badge {
@@ -173,27 +291,26 @@
     gap: 6px;
     padding: 3px 10px;
     border-radius: 20px;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-family: 'JetBrains Mono', monospace;
   }
-  .badge-json  { background: rgba(124,106,247,0.15); color: var(--accent); border: 1px solid rgba(124,106,247,0.3); }
-  .badge-text  { background: rgba(79,209,197,0.15);  color: var(--accent2); border: 1px solid rgba(79,209,197,0.3); }
-  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge-json { background: rgba(124,106,247,0.15); color: var(--accent);  border: 1px solid rgba(124,106,247,0.3); }
+  .badge-text { background: rgba(79,209,197,0.15);  color: var(--accent2); border: 1px solid rgba(79,209,197,0.3); }
+  .badge-dot  { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
-  /* JSON viewer */
   #json-out {
     padding: 16px;
     background: var(--code-bg);
     overflow-x: auto;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
+    font-size: 0.79rem;
     line-height: 1.8;
     white-space: pre;
-    max-height: 520px;
+    max-height: 600px;
     overflow-y: auto;
+    display: none;
   }
 
-  /* text output */
   #text-out {
     padding: 16px 20px;
     font-family: 'Sarabun', sans-serif;
@@ -201,53 +318,118 @@
     line-height: 1.9;
     white-space: pre-wrap;
     word-break: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    display: none;
   }
 
-  /* JSON syntax highlight */
-  .jk { color: #79c0ff; }   /* key */
-  .js { color: #a5d6ff; }   /* string value */
-  .jn { color: #ffa657; }   /* number */
-  .jb { color: #ff7b72; }   /* bool/null */
-  .jp { color: #8b949e; }   /* punctuation */
+  /* progress */
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    display: none;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 0.2s;
+  }
 
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--code-bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  /* stats bar */
+  .stats-bar {
+    padding: 8px 16px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    display: none;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; gap: 5px; }
+  .stat span { color: var(--accent2); }
+
+  /* syntax highlight */
+  .jk { color: #79c0ff; }
+  .js { color: #a5d6ff; }
+  .jn { color: #ffa657; }
+  .jb { color: #ff7b72; }
+  .jp { color: #8b949e; }
 
   /* error */
   .error-msg {
     padding: 12px 16px;
+    margin: 12px 16px;
     background: rgba(255,123,114,0.1);
-    border-left: 3px solid #ff7b72;
-    color: #ff7b72;
+    border-left: 3px solid var(--red);
+    color: var(--red);
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.8rem;
     border-radius: 0 6px 6px 0;
-    margin: 12px 16px;
   }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--code-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
 <body>
 <div class="wrapper">
   <header>
     <h1>// Unicode Decoder</h1>
-    <p>วาง Unicode escape sequence แล้วกด Decode — ถ้าเป็น JSON จะ format ให้อัตโนมัติ</p>
+    <p>รองรับ paste ข้อความ หรืออัปโหลดไฟล์ขนาดใหญ่ — JSON จะ format อัตโนมัติ</p>
   </header>
 
-  <div class="card">
-    <div class="card-header">
-      <span class="card-label">INPUT</span>
-      <span class="char-count" id="in-count">0 chars</span>
-    </div>
-    <textarea id="input" placeholder='วางโค้ด Unicode ที่นี่ เช่น {"\u0066\u006f\u0072\u006d\u0061\u0074..."}'></textarea>
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('text')">✎ &nbsp;Paste Text</button>
+    <button class="tab" onclick="switchTab('file')">⬆ &nbsp;Upload File</button>
   </div>
 
+  <!-- TEXT PANE -->
+  <div id="pane-text">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">INPUT</span>
+        <span class="info-pill" id="in-count">0 chars</span>
+      </div>
+      <textarea id="input" placeholder='วาง Unicode escape ที่นี่ เช่น {"\u0066\u006f\u0072\u006d..."}'></textarea>
+    </div>
+  </div>
+
+  <!-- FILE PANE -->
+  <div id="pane-file">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-label">UPLOAD FILE</span>
+        <span class="info-pill">รองรับ .json .txt .js ทุกขนาด</span>
+      </div>
+
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" accept=".json,.txt,.js,.ts,.cfg,.lang,.mcmeta" onchange="handleFile(this.files[0])">
+        <span class="drop-icon">📂</span>
+        <h3>Drag & Drop ไฟล์ที่นี่</h3>
+        <p>หรือคลิกเพื่อเลือกไฟล์ · .json / .txt / .js และอื่นๆ</p>
+      </div>
+
+      <div class="file-info" id="file-info">
+        <span>📄</span>
+        <span class="fname" id="file-name">—</span>
+        <span class="fsize" id="file-size">—</span>
+        <button class="file-remove" onclick="clearFile()" title="Remove">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
   <div class="btn-row">
-    <button class="btn-primary" onclick="decode()">⚡ Decode</button>
+    <button class="btn-primary" id="decode-btn" onclick="decode()">⚡ Decode</button>
     <button class="btn-secondary" onclick="clearAll()">✕ Clear</button>
   </div>
 
+  <!-- OUTPUT -->
   <div id="output-wrap">
     <div class="card">
       <div class="card-header">
@@ -255,100 +437,181 @@
           <span class="card-label">OUTPUT</span>
           <span id="type-badge"></span>
         </div>
-        <button class="btn-copy" id="copy-btn" onclick="copyOutput()">Copy</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-dl"   id="dl-btn"   onclick="downloadOutput()">↓ Download</button>
+          <button class="btn-copy" id="copy-btn" onclick="copyOutput()">Copy</button>
+        </div>
       </div>
+
+      <div class="progress-bar" id="prog-bar"><div class="progress-fill" id="prog-fill"></div></div>
+
       <div id="json-out"></div>
       <div id="text-out"></div>
       <div id="error-out"></div>
+
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat">Input <span id="st-in">—</span></div>
+        <div class="stat">Output <span id="st-out">—</span></div>
+        <div class="stat">Escapes found <span id="st-esc">—</span></div>
+        <div class="stat">Type <span id="st-type">—</span></div>
+        <div class="stat">Time <span id="st-time">—</span></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const inputEl   = document.getElementById('input');
-const inCount   = document.getElementById('in-count');
-const outputWrap = document.getElementById('output-wrap');
-const jsonOut   = document.getElementById('json-out');
-const textOut   = document.getElementById('text-out');
-const errorOut  = document.getElementById('error-out');
-const typeBadge = document.getElementById('type-badge');
+// ── State ──────────────────────────────────────────────
+let currentTab = 'text';
+let fileContent = null;
+let rawOutput   = '';
 
-inputEl.addEventListener('input', () => {
-  inCount.textContent = inputEl.value.length + ' chars';
+// ── Tabs ───────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='text')||(i===1&&tab==='file')));
+  document.getElementById('pane-text').style.display = tab === 'text' ? 'block' : 'none';
+  document.getElementById('pane-file').style.display = tab === 'file' ? 'block' : 'none';
+}
+
+// ── Input count ────────────────────────────────────────
+document.getElementById('input').addEventListener('input', function() {
+  document.getElementById('in-count').textContent = fmt(this.value.length) + ' chars';
 });
 
+document.getElementById('input').addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') decode();
+});
+
+// ── Drag & Drop ────────────────────────────────────────
+const dz = document.getElementById('drop-zone');
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', ()=> dz.classList.remove('over'));
+dz.addEventListener('drop', e => {
+  e.preventDefault();
+  dz.classList.remove('over');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+});
+
+function handleFile(file) {
+  if (!file) return;
+  const fi = document.getElementById('file-info');
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent = fmtBytes(file.size);
+  fi.style.display = 'flex';
+
+  const reader = new FileReader();
+  reader.onload = e => { fileContent = e.target.result; };
+  reader.readAsText(file, 'utf-8');
+}
+
+function clearFile() {
+  fileContent = null;
+  document.getElementById('file-input').value = '';
+  document.getElementById('file-info').style.display = 'none';
+}
+
+// ── Decode ─────────────────────────────────────────────
 function decode() {
-  const raw = inputEl.value.trim();
+  const raw = currentTab === 'text'
+    ? document.getElementById('input').value.trim()
+    : (fileContent || '').trim();
+
   if (!raw) return;
 
-  // Step 1: decode unicode escapes
+  const t0 = performance.now();
+  const escCount = (raw.match(/\\u[0-9a-fA-F]{4}/g) || []).length;
+
+  // decode unicode escapes (chunked for large files)
   let decoded;
   try {
-    decoded = raw.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
-      String.fromCharCode(parseInt(hex, 16))
-    );
+    decoded = decodeUnicode(raw);
   } catch(e) {
-    showError('Decode error: ' + e.message);
-    return;
+    showError('Decode error: ' + e.message); return;
   }
 
-  outputWrap.style.display = 'block';
-  jsonOut.style.display  = 'none';
-  textOut.style.display  = 'none';
-  errorOut.innerHTML     = '';
+  const t1 = performance.now();
 
-  // Step 2: try parse as JSON
+  // show output area
+  const wrap = document.getElementById('output-wrap');
+  wrap.style.display = 'block';
+  document.getElementById('json-out').style.display = 'none';
+  document.getElementById('text-out').style.display = 'none';
+  document.getElementById('error-out').innerHTML = '';
+
+  // try JSON
+  let isJson = false;
   try {
     const obj = JSON.parse(decoded);
     const pretty = JSON.stringify(obj, null, 2);
-    jsonOut.style.display = 'block';
-    jsonOut.innerHTML = highlight(pretty);
-    typeBadge.innerHTML = '<span class="output-type-badge badge-json"><span class="badge-dot"></span>JSON</span>';
-    textOut._raw = pretty;
+    rawOutput = pretty;
+    isJson = true;
+
+    const jout = document.getElementById('json-out');
+    jout.style.display = 'block';
+
+    // large file: skip syntax highlight to avoid freeze
+    if (pretty.length > 300000) {
+      jout.textContent = pretty;
+    } else {
+      jout.innerHTML = highlight(pretty);
+    }
+
+    document.getElementById('type-badge').innerHTML =
+      '<span class="output-type-badge badge-json"><span class="badge-dot"></span>JSON</span>';
+
   } catch(e) {
-    // Not JSON — show as plain text
-    textOut.style.display = 'block';
-    textOut.textContent = decoded;
-    typeBadge.innerHTML = '<span class="output-type-badge badge-text"><span class="badge-dot"></span>TEXT</span>';
-    textOut._raw = decoded;
+    rawOutput = decoded;
+    const tout = document.getElementById('text-out');
+    tout.style.display = 'block';
+    tout.textContent = decoded;
+    document.getElementById('type-badge').innerHTML =
+      '<span class="output-type-badge badge-text"><span class="badge-dot"></span>TEXT</span>';
   }
+
+  // stats
+  const t2 = performance.now();
+  const sb = document.getElementById('stats-bar');
+  sb.style.display = 'flex';
+  document.getElementById('st-in').textContent  = fmt(raw.length) + ' chars';
+  document.getElementById('st-out').textContent = fmt(rawOutput.length) + ' chars';
+  document.getElementById('st-esc').textContent = fmt(escCount);
+  document.getElementById('st-type').textContent= isJson ? 'JSON' : 'Plain text';
+  document.getElementById('st-time').textContent= (t2-t0).toFixed(1) + ' ms';
 }
 
+// decode in one pass (fast)
+function decodeUnicode(str) {
+  return str.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) =>
+    String.fromCharCode(parseInt(hex, 16))
+  );
+}
+
+// ── Syntax highlight ───────────────────────────────────
 function highlight(json) {
   return json
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*")\s*:/g,
-      m => `<span class="jk">${m}</span>`)
-    .replace(/:\s*("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*")/g,
-      (m, s) => `: <span class="js">${s}</span>`)
-    .replace(/:\s*(\-?\d+\.?\d*([eE][+\-]?\d+)?)/g,
-      (m, n) => `: <span class="jn">${n}</span>`)
-    .replace(/:\s*(true|false|null)/g,
-      (m, b) => `: <span class="jb">${b}</span>`)
-    .replace(/([{}\[\],])/g,
-      m => `<span class="jp">${m}</span>`);
+    .replace(/("(?:\\.|[^"\\])*")\s*:/g, m => `<span class="jk">${m}</span>`)
+    .replace(/:\s*("(?:\\.|[^"\\])*")/g, (_, s) => `: <span class="js">${s}</span>`)
+    .replace(/:\s*(-?\d+\.?\d*(?:[eE][+\-]?\d+)?)/g, (_, n) => `: <span class="jn">${n}</span>`)
+    .replace(/:\s*(true|false|null)/g, (_, b) => `: <span class="jb">${b}</span>`)
+    .replace(/([{}\[\],])/g, m => `<span class="jp">${m}</span>`);
 }
 
-function showError(msg) {
-  outputWrap.style.display = 'block';
-  jsonOut.style.display  = 'none';
-  textOut.style.display  = 'none';
-  errorOut.innerHTML = `<div class="error-msg">${msg}</div>`;
-  typeBadge.innerHTML = '';
+// ── Download ───────────────────────────────────────────
+function downloadOutput() {
+  const isJson = document.getElementById('json-out').style.display !== 'none';
+  const blob = new Blob([rawOutput], { type: isJson ? 'application/json' : 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'decoded' + (isJson ? '.json' : '.txt');
+  a.click();
 }
 
-function clearAll() {
-  inputEl.value = '';
-  inCount.textContent = '0 chars';
-  outputWrap.style.display = 'none';
-  jsonOut.innerHTML  = '';
-  textOut.textContent = '';
-  errorOut.innerHTML  = '';
-}
-
+// ── Copy ───────────────────────────────────────────────
 function copyOutput() {
-  const raw = textOut._raw || jsonOut.textContent || textOut.textContent;
-  navigator.clipboard.writeText(raw).then(() => {
+  navigator.clipboard.writeText(rawOutput).then(() => {
     const btn = document.getElementById('copy-btn');
     btn.textContent = 'Copied!';
     btn.classList.add('copied');
@@ -356,10 +619,35 @@ function copyOutput() {
   });
 }
 
-// allow decode with Ctrl+Enter
-inputEl.addEventListener('keydown', e => {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') decode();
-});
+// ── Clear ──────────────────────────────────────────────
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('in-count').textContent = '0 chars';
+  document.getElementById('output-wrap').style.display = 'none';
+  document.getElementById('json-out').innerHTML = '';
+  document.getElementById('text-out').textContent = '';
+  document.getElementById('error-out').innerHTML = '';
+  document.getElementById('stats-bar').style.display = 'none';
+  rawOutput = '';
+  clearFile();
+}
+
+function showError(msg) {
+  document.getElementById('output-wrap').style.display = 'block';
+  document.getElementById('json-out').style.display = 'none';
+  document.getElementById('text-out').style.display = 'none';
+  document.getElementById('error-out').innerHTML = `<div class="error-msg">${msg}</div>`;
+  document.getElementById('type-badge').innerHTML = '';
+  document.getElementById('stats-bar').style.display = 'none';
+}
+
+// ── Helpers ────────────────────────────────────────────
+function fmt(n) { return n.toLocaleString(); }
+function fmtBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+  return (b/1048576).toFixed(2) + ' MB';
+}
 </script>
 </body>
 </html>
